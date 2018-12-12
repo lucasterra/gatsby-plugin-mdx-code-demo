@@ -1,0 +1,43 @@
+{
+  "name": "gatsby-plugin-mdx-code-demo",
+  "description": "Gatsby plugin to generate code demos from JavaScript files",
+  "version": "0.1.0",
+  "author": "Lucas Terra <lucasterra7@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/gatsbyjs/gatsby/issues"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/lucasterra/gatsby-plugin-mdx-code-demo#readme",
+  "repository": "https://github.com/lucasterra/gatsby-plugin-mdx-code-demo",
+  "main": "index.js",
+  "keywords": [
+    "babel",
+    "gatsby",
+    "gatsby-plugin",
+    "remark",
+    "embed",
+    "demo",
+    "mdx"
+  ],
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "normalize-path": "^3.0.0",
+    "unist-util-map": "^1.0.4",
+    "htmltojsx": "^0.3.0"
+  },
+  "devDependencies": {
+    "@mdx-js/mdx": "^0.16.0",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.8.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "jest": "^23.6.0",
+    "prettier": "~1.15.1",
+    "prismjs": "^1.15.0"
+  },
+  "peerDependencies": {
+    "gatsby": ">=2.0.0",
+    "prismjs": "^1.15.0"
+  }
+}
