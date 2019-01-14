@@ -2,12 +2,26 @@
 
 exports[`gatsby-mdx-code-demo include code demo should work as expected 1`] = `
 "import DemoComponent from './demo-test'
-import Demo_a627691ae2b7203ab866f8d1853ac538 from '/Users/lucasterra/bui/packages/docs-website/plugins/gatsby-mdx-code-demo/static-appbar.js'
+import Demo_0417875d4cdb3bf1fcf8354cb6bedeee from '/path/to/some_directory/static-appbar.js'
 
-export default ({components, ...props}) => <MDXTag name=\\"wrapper\\"  components={components}>
+export default class MDXContent extends React.Component {
+  constructor(props) {
+    super(props)
+    this.layout = null
+  }
+  render() {
+    const { components, ...props } = this.props
+
+    return <MDXTag
+             name=\\"wrapper\\"
+             
+             components={components}>
 
 <MDXTag name=\\"h1\\" components={components}>{\`Title\`}</MDXTag>
 <DemoComponent code={<div className=\\"gatsby-highlight\\"><pre className=\\"language-jsx\\"><code>{\\"\\\\n\\"}// prettier-ignore-start{\\"\\\\n\\"}import React from 'react'{\\"\\\\n\\"}// I wanna add some comments, just to make sure it will also escape them{\\"\\\\n\\"}{\\"\\\\n\\"}const StaticAppBar = () =&gt; {\\"{\\"}{\\"\\\\n\\"}{\\"  \\"}return ({\\"\\\\n\\"}{\\"    \\"}<span className=\\"token tag\\"><span className=\\"token tag\\"><span className=\\"token punctuation\\">&lt;</span>div</span><span className=\\"token punctuation\\">&gt;</span></span><span className=\\"token plain-text\\">This is my appbar, it is so cool, right?</span><span className=\\"token tag\\"><span className=\\"token tag\\"><span className=\\"token punctuation\\">&lt;/</span>div</span><span className=\\"token punctuation\\">&gt;</span></span>{\\"\\\\n\\"}{\\"  \\"});{\\"\\\\n\\"}{\\"}\\"}{\\"\\\\n\\"}{\\"\\\\n\\"}export default StaticAppBar{\\"\\\\n\\"}// prettier-ignore-end{\\"\\\\n\\"}</code></pre></div>
-}><Demo_a627691ae2b7203ab866f8d1853ac538/></DemoComponent>
-<MDXTag name=\\"p\\" components={components}>{\`Lorem ipsum dolor sit amet.\`}</MDXTag></MDXTag>"
+}><Demo_0417875d4cdb3bf1fcf8354cb6bedeee/></DemoComponent>
+<MDXTag name=\\"p\\" components={components}>{\`Lorem ipsum dolor sit amet.\`}</MDXTag>
+           </MDXTag>
+  }
+}"
 `;

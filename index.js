@@ -3,6 +3,7 @@
 
 const fs = require('fs');
 const crypto = require('crypto');
+const slash = require('slash');
 const { join, dirname } = require('path');
 const map = require('unist-util-map');
 const normalizePath = require('normalize-path');
@@ -78,7 +79,7 @@ module.exports = ({ markdownAST, markdownNode }, { demoComponent } = {}) => {
     (filePath) => ({
       type: 'import',
       default: false,
-      value: `import ${injectedComponentsHash[filePath]} from '${filePath}'`,
+      value: `import ${injectedComponentsHash[filePath]} from '${slash(filePath)}'`,
     }),
   );
   markdownAST.children = [...injectedComponents, ...markdownAST.children];

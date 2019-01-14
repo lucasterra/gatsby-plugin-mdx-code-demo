@@ -1,7 +1,9 @@
 // @ts-nocheck
 jest.mock('fs');
+jest.mock('path');
 
 const fs = require('fs');
+const path = require('path');
 const mdx = require('@mdx-js/mdx');
 const plugin = require('../index');
 
@@ -36,6 +38,12 @@ describe('gatsby-mdx-code-demo', () => {
 
     fs.readFileSync.mockReset();
     fs.readFileSync.mockReturnValue(demoCode);
+
+    path.dirname.mockReset();
+    path.dirname.mockReturnValue('/path/to/some_directory');
+
+    path.join.mockReset();
+    path.join.mockReturnValue('/path/to/some_directory/static-appbar.js');
   });
 
   describe('include code demo', () => {
