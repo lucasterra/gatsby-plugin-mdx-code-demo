@@ -1,27 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`gatsby-mdx-code-demo include code demo should work as expected 1`] = `
-"import DemoComponent from './demo-test'
+"/* @jsx mdx */
+import DemoComponent from './demo-test'
 import Demo_0417875d4cdb3bf1fcf8354cb6bedeee from '/path/to/some_directory/static-appbar.js'
 
-export default class MDXContent extends React.Component {
-  constructor(props) {
-    super(props)
-    this.layout = null
-  }
-  render() {
-    const { components, ...props } = this.props
+const makeShortcode = name => function MDXDefaultShortcode(props) {
+  console.warn(\\"Component \\" + name + \\" was not imported, exported, or provided by MDXProvider as global scope\\")
+  return <div {...props}/>
+};
 
-    return <MDXTag
-             name=\\"wrapper\\"
-             
-             components={components}>
+const layoutProps = {
+  
+};
+const MDXLayout = \\"wrapper\\"
+export default function MDXContent({
+  components,
+  ...props
+}) {
+  return <MDXLayout {...layoutProps} {...props} components={components} mdxType=\\"MDXLayout\\">
 
-<MDXTag name=\\"h1\\" components={components}>{\`Title\`}</MDXTag>
-<DemoComponent code={<div className=\\"gatsby-highlight\\"><pre className=\\"language-jsx\\"><code>{\\"\\\\n\\"}// prettier-ignore-start{\\"\\\\n\\"}import React from 'react'{\\"\\\\n\\"}// I wanna add some comments, just to make sure it will also escape them{\\"\\\\n\\"}{\\"\\\\n\\"}const StaticAppBar = () =&gt; {\\"{\\"}{\\"\\\\n\\"}{\\"  \\"}return ({\\"\\\\n\\"}{\\"    \\"}<span className=\\"token tag\\"><span className=\\"token tag\\"><span className=\\"token punctuation\\">&lt;</span>div</span><span className=\\"token punctuation\\">&gt;</span></span><span className=\\"token plain-text\\">This is my appbar, it is so cool, right?</span><span className=\\"token tag\\"><span className=\\"token tag\\"><span className=\\"token punctuation\\">&lt;/</span>div</span><span className=\\"token punctuation\\">&gt;</span></span>{\\"\\\\n\\"}{\\"  \\"});{\\"\\\\n\\"}{\\"}\\"}{\\"\\\\n\\"}{\\"\\\\n\\"}export default StaticAppBar{\\"\\\\n\\"}// prettier-ignore-end{\\"\\\\n\\"}</code></pre></div>
-}><Demo_0417875d4cdb3bf1fcf8354cb6bedeee/></DemoComponent>
-<MDXTag name=\\"p\\" components={components}>{\`Lorem ipsum dolor sit amet.\`}</MDXTag>
-           </MDXTag>
-  }
-}"
+
+    <h1>{\`Title\`}</h1>
+    <DemoComponent code={<div className=\\"gatsby-highlight\\"><pre className=\\"language-jsx\\"><code>{\\"\\\\n\\"}// prettier-ignore-start{\\"\\\\n\\"}import React from 'react'{\\"\\\\n\\"}// I wanna add some comments, just to make sure it will also escape them{\\"\\\\n\\"}{\\"\\\\n\\"}const StaticAppBar = () =&gt; {\\"{\\"}{\\"\\\\n\\"}{\\"  \\"}return ({\\"\\\\n\\"}{\\"    \\"}<span className=\\"token tag\\"><span className=\\"token tag\\"><span className=\\"token punctuation\\">&lt;</span>div</span><span className=\\"token punctuation\\">&gt;</span></span><span className=\\"token plain-text\\">This is my appbar, it is so cool, right?</span><span className=\\"token tag\\"><span className=\\"token tag\\"><span className=\\"token punctuation\\">&lt;/</span>div</span><span className=\\"token punctuation\\">&gt;</span></span>{\\"\\\\n\\"}{\\"  \\"});{\\"\\\\n\\"}{\\"}\\"}{\\"\\\\n\\"}{\\"\\\\n\\"}export default StaticAppBar{\\"\\\\n\\"}// prettier-ignore-end{\\"\\\\n\\"}</code></pre></div>} mdxType=\\"DemoComponent\\"><Demo_0417875d4cdb3bf1fcf8354cb6bedeee mdxType=\\"Demo_0417875d4cdb3bf1fcf8354cb6bedeee\\" /></DemoComponent>
+    <p>{\`Lorem ipsum dolor sit amet.\`}</p>
+    </MDXLayout>;
+}
+
+MDXContent.isMDXComponent = true;"
 `;

@@ -24,12 +24,12 @@
   },
   "dependencies": {
     "normalize-path": "^3.0.0",
-    "unist-util-map": "^1.0.4",
+    "unist-util-map": "^1.0.5",
     "htmltojsx": "^0.3.0",
     "slash": "^2.0.0"
   },
   "devDependencies": {
-    "@mdx-js/mdx": "^0.16.0",
+    "@mdx-js/mdx": "^1.0.20",
     "cross-env": "^5.2.0",
     "eslint": "^5.8.0",
     "eslint-config-airbnb-base": "^13.1.0",

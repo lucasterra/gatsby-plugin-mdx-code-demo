@@ -56,7 +56,7 @@ describe('gatsby-mdx-code-demo', () => {
         );
       };
 
-      compiler = (text) => mdx.sync(text, { mdPlugins: [[demoPlugin]] });
+      compiler = (text) => mdx.sync(text, { remarkPlugins: [[demoPlugin]] });
     });
 
     it('should work as expected', () => {

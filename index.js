@@ -15,7 +15,7 @@ function convertNodeToLocalDemo(node, parent, code, componentName) {
   const highlightedCode = highlightCode('jsx', code);
 
   delete parent.children;
-  parent.type = 'html';
+  parent.type = 'jsx';
   parent.value = `<DemoComponent code={${highlightedCode}}><${componentName}/></DemoComponent>`;
 }
 
