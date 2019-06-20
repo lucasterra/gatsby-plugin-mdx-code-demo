@@ -2,10 +2,11 @@
 /* eslint no-param-reassign: ["off"] */
 
 const fs = require('fs');
+const { promisify } = require('util');
 const crypto = require('crypto');
 const slash = require('slash');
 const { join, dirname } = require('path');
-const map = require('unist-util-map');
+const visit = require('unist-util-visit');
 const normalizePath = require('normalize-path');
 const highlightCode = require('./highlight-code');
 
@@ -19,11 +20,16 @@ function convertNodeToLocalDemo(node, parent, code, componentName) {
   parent.value = `<DemoComponent code={${highlightedCode}}><${componentName}/></DemoComponent>`;
 }
 
-module.exports = ({ markdownAST, markdownNode }, { demoComponent } = {}) => {
-  const directory = dirname(markdownNode.fileAbsolutePath) + '/';
+const stat = promisify(fs.stat);
+const readFile = promisify(fs.readFile);
+
+module.exports = async ({ markdownAST, markdownNode }, { demoComponent } = {}) => {
   if (!demoComponent) {
     throw Error('Required CODEDEMO option "demoComponent" not specified');
-  } else if (!fs.existsSync(demoComponent)) {
+  }
+
+  const fileStat = await stat(demoComponent);
+  if (!fileStat.isFile) {
     throw Error(
       `Invalid CODEDEMO "demoComponent" specified "${demoComponent}"`,
     );
@@ -34,55 +40,59 @@ module.exports = ({ markdownAST, markdownNode }, { demoComponent } = {}) => {
     [demoComponent]: 'DemoComponent',
   };
 
+  const directory = slash(dirname(markdownNode.fileAbsolutePath) + '/');
   const getFilePath = (path) => {
     let filePath = path;
     if (!filePath.includes('.')) {
       filePath += '.js';
     }
-    filePath = normalizePath(join(directory, filePath));
+    filePath = slash(normalizePath(join(directory, filePath)));
 
     return filePath;
   };
 
+  const nodesToChange = [];
+
   // iterate inlineCode to find our regex
-  map(markdownAST, (node, index, parent) => {
-    if (node.type === 'link') {
-      const match = node.url.match(CODE_DEMO_URL_REGEX);
+  visit(markdownAST, 'link', (node, index, parent) => {
+    const match = node.url.match(CODE_DEMO_URL_REGEX);
 
-      if (match) {
-        const filePath = getFilePath(match[1]);
-        const filePathHash = crypto
-          .createHash('md5')
-          .update(filePath)
-          .digest('hex');
+    if (match) {
+      const filePath = getFilePath(match[1]);
+      const filePathHash = crypto
+        .createHash('md5')
+        .update(filePath)
+        .digest('hex');
 
-        const componentName = `Demo_${filePathHash}`;
+      const componentName = `Demo_${filePathHash}`;
 
-        if (!fs.existsSync(filePath)) {
-          throw Error(
-            `Invalid CODEDEMO link specified; no such file "${filePath}"`,
-          );
-        }
+      nodesToChange.push({ node, parent, filePath, componentName });
+      injectedComponentsHash[filePath] = componentName;
+    }
+  });
 
-        const code = fs.readFileSync(filePath, 'utf8');
-
-        convertNodeToLocalDemo(node, parent, code, componentName);
-        injectedComponentsHash[filePath] = componentName;
-      }
+  await Promise.all(nodesToChange.map(async (n) => {
+    const fileStat = await stat(n.filePath);
+    if (!fileStat.isFile) {
+      throw Error(
+        `Invalid CODEDEMO link specified; no such file "${n.filePath}"`,
+      );
     }
 
-    // No change
-    return node;
-  });
+    const code = await readFile(n.filePath, 'utf8');
+    convertNodeToLocalDemo(n.node, n.parent, code, n.componentName);
+  }));
 
   const injectedComponents = Object.keys(injectedComponentsHash).map(
     (filePath) => ({
       type: 'import',
-      default: false,
-      value: `import ${injectedComponentsHash[filePath]} from '${slash(filePath)}'`,
+      value: `import ${injectedComponentsHash[filePath]} from '${filePath.replace(directory, './')}'`,
     }),
   );
-  markdownAST.children = [...injectedComponents, ...markdownAST.children];
+
+  if (injectedComponents.length > 1) {
+    markdownAST.children = [...injectedComponents, ...markdownAST.children];
+  }
 
   return markdownAST;
 };

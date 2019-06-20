@@ -33,11 +33,15 @@ export default StaticAppBar
 
 describe('gatsby-mdx-code-demo', () => {
   beforeEach(() => {
-    fs.existsSync.mockReset();
-    fs.existsSync.mockReturnValue(true);
+    fs.stat.mockReset();
+    fs.stat.mockImplementation((file, cb) => {
+      cb(null, { isFile: true, isMock: true });
+    });
 
-    fs.readFileSync.mockReset();
-    fs.readFileSync.mockReturnValue(demoCode);
+    fs.readFile.mockReset();
+    fs.readFile.mockImplementation((file, openMode, cb) => {
+      cb(null, demoCode);
+    });
 
     path.dirname.mockReset();
     path.dirname.mockReturnValue('/path/to/some_directory');
@@ -48,19 +52,19 @@ describe('gatsby-mdx-code-demo', () => {
 
   describe('include code demo', () => {
     let compiler;
-    beforeAll(() => {
-      const demoPlugin = () => (tree) => {
-        plugin(
+    beforeAll(async() => {
+      const demoPlugin = () => async (tree) => {
+        await plugin(
           { markdownAST: tree, markdownNode: { fileAbsolutePath: __dirname } },
           { demoComponent: './demo-test' },
         );
       };
 
-      compiler = (text) => mdx.sync(text, { remarkPlugins: [[demoPlugin]] });
+      compiler = (text) => mdx(text, { remarkPlugins: [[demoPlugin]] });
     });
 
-    it('should work as expected', () => {
-      const textAST = compiler(mdxText);
+    it('should work as expected', async () => {
+      const textAST = await compiler(mdxText);
       expect(textAST).toMatchSnapshot();
     });
   });

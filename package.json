@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "normalize-path": "^3.0.0",
-    "unist-util-map": "^1.0.5",
+    "unist-util-visit": "^1.4.1",
     "htmltojsx": "^0.3.0",
     "slash": "^2.0.0"
   },

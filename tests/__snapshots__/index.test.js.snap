@@ -3,7 +3,7 @@
 exports[`gatsby-mdx-code-demo include code demo should work as expected 1`] = `
 "/* @jsx mdx */
 import DemoComponent from './demo-test'
-import Demo_0417875d4cdb3bf1fcf8354cb6bedeee from '/path/to/some_directory/static-appbar.js'
+import Demo_0417875d4cdb3bf1fcf8354cb6bedeee from './static-appbar.js'
 
 const makeShortcode = name => function MDXDefaultShortcode(props) {
   console.warn(\\"Component \\" + name + \\" was not imported, exported, or provided by MDXProvider as global scope\\")
