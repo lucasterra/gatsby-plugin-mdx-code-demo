@@ -27,17 +27,18 @@ module.exports = async ({ markdownAST, markdownNode }, { demoComponent } = {}) =
   if (!demoComponent) {
     throw Error('Required CODEDEMO option "demoComponent" not specified');
   }
+  const demoComponentPath = slash(demoComponent);
 
-  const fileStat = await stat(demoComponent);
+  const fileStat = await stat(demoComponentPath);
   if (!fileStat.isFile) {
     throw Error(
-      `Invalid CODEDEMO "demoComponent" specified "${demoComponent}"`,
+      `Invalid CODEDEMO "demoComponent" specified "${demoComponentPath}"`,
     );
   }
 
   // Components which will get injected at the top of MDX file
   const injectedComponentsHash = {
-    [demoComponent]: 'DemoComponent',
+    [demoComponentPath]: 'DemoComponent',
   };
 
   const directory = slash(dirname(markdownNode.fileAbsolutePath) + '/');
