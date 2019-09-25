@@ -44,10 +44,10 @@ describe('gatsby-mdx-code-demo', () => {
     });
 
     path.dirname.mockReset();
-    path.dirname.mockReturnValue('/path/to/some_directory');
+    path.dirname.mockReturnValue('\\path\\to\\some_directory');
 
     path.join.mockReset();
-    path.join.mockReturnValue('/path/to/some_directory/static-appbar.js');
+    path.join.mockReturnValue('\\path\\to\\some_directory\\static-appbar.js');
   });
 
   describe('include code demo', () => {

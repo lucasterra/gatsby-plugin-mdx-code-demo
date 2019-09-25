@@ -2,7 +2,7 @@
 
 exports[`gatsby-mdx-code-demo include code demo should work as expected 1`] = `
 "/* @jsx mdx */
-import DemoComponent from './demo-test'
+import DemoComponent from './demo-test.js'
 import Demo_0417875d4cdb3bf1fcf8354cb6bedeee from './static-appbar.js'
 
 const makeShortcode = name => function MDXDefaultShortcode(props) {

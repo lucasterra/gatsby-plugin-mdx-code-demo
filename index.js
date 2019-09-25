@@ -4,7 +4,6 @@
 const fs = require('fs');
 const { promisify } = require('util');
 const crypto = require('crypto');
-const slash = require('slash');
 const { join, dirname } = require('path');
 const visit = require('unist-util-visit');
 const normalizePath = require('normalize-path');
@@ -35,6 +34,14 @@ function fileExists(filePath) {
   });
 }
 
+function addSuffix(path, suffix) {
+  if (!path.endsWith(suffix)) {
+    return path + suffix;
+  }
+
+  return path;
+}
+
 module.exports = async (
   { markdownAST, markdownNode },
   { demoComponent } = {},
@@ -42,8 +49,8 @@ module.exports = async (
   if (!demoComponent) {
     throw Error('Required CODEDEMO option "demoComponent" not specified');
   }
-  const demoComponentPath = slash(demoComponent);
 
+  const demoComponentPath = addSuffix(normalizePath(demoComponent), '.js');
   if (!(await fileExists(demoComponentPath))) {
     throw Error(
       `Invalid CODEDEMO "demoComponent" specified "${demoComponentPath}"`,
@@ -55,13 +62,10 @@ module.exports = async (
     [demoComponentPath]: 'DemoComponent',
   };
 
-  const directory = slash(dirname(markdownNode.fileAbsolutePath));
+  const directory = normalizePath(dirname(markdownNode.fileAbsolutePath));
   const getFilePath = (path) => {
-    let filePath = path;
-    if (!filePath.includes('.')) {
-      filePath += '.js';
-    }
-    filePath = slash(normalizePath(join(directory, filePath)));
+    let filePath = addSuffix(path, '.js');
+    filePath = normalizePath(join(directory, filePath));
 
     return filePath;
   };
