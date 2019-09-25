@@ -35,7 +35,7 @@ describe('gatsby-mdx-code-demo', () => {
   beforeEach(() => {
     fs.stat.mockReset();
     fs.stat.mockImplementation((file, cb) => {
-      cb(null, { isFile: true, isMock: true });
+      cb(null, { isFile: () => true, isMock: true });
     });
 
     fs.readFile.mockReset();
@@ -52,7 +52,7 @@ describe('gatsby-mdx-code-demo', () => {
 
   describe('include code demo', () => {
     let compiler;
-    beforeAll(async() => {
+    beforeAll(async () => {
       const demoPlugin = () => async (tree) => {
         await plugin(
           { markdownAST: tree, markdownNode: { fileAbsolutePath: __dirname } },

@@ -1,4 +1,5 @@
 const highlight = require('../highlight-code');
+
 const demoCode = `
 // prettier-ignore-start
 import React from 'react'

@@ -10,6 +10,8 @@ const visit = require('unist-util-visit');
 const normalizePath = require('normalize-path');
 const highlightCode = require('./highlight-code');
 
+const readFile = promisify(fs.readFile);
+
 const CODE_DEMO_URL_REGEX = /^demo:\/\/(.+)/;
 
 function convertNodeToLocalDemo(node, parent, code, componentName) {
@@ -20,17 +22,29 @@ function convertNodeToLocalDemo(node, parent, code, componentName) {
   parent.value = `<DemoComponent code={${highlightedCode}}><${componentName}/></DemoComponent>`;
 }
 
-const stat = promisify(fs.stat);
-const readFile = promisify(fs.readFile);
+function fileExists(filePath) {
+  return new Promise((resolve, reject) => {
+    fs.stat(filePath, (err, stats) => {
+      if (err) {
+        reject(err);
+        return;
+      }
 
-module.exports = async ({ markdownAST, markdownNode }, { demoComponent } = {}) => {
+      resolve(stats.isFile());
+    });
+  });
+}
+
+module.exports = async (
+  { markdownAST, markdownNode },
+  { demoComponent } = {},
+) => {
   if (!demoComponent) {
     throw Error('Required CODEDEMO option "demoComponent" not specified');
   }
   const demoComponentPath = slash(demoComponent);
 
-  const fileStat = await stat(demoComponentPath);
-  if (!fileStat.isFile) {
+  if (!(await fileExists(demoComponentPath))) {
     throw Error(
       `Invalid CODEDEMO "demoComponent" specified "${demoComponentPath}"`,
     );
@@ -41,7 +55,7 @@ module.exports = async ({ markdownAST, markdownNode }, { demoComponent } = {}) =
     [demoComponentPath]: 'DemoComponent',
   };
 
-  const directory = slash(dirname(markdownNode.fileAbsolutePath) + '/');
+  const directory = slash(dirname(markdownNode.fileAbsolutePath));
   const getFilePath = (path) => {
     let filePath = path;
     if (!filePath.includes('.')) {
@@ -67,27 +81,35 @@ module.exports = async ({ markdownAST, markdownNode }, { demoComponent } = {}) =
 
       const componentName = `Demo_${filePathHash}`;
 
-      nodesToChange.push({ node, parent, filePath, componentName });
+      nodesToChange.push({
+        node,
+        parent,
+        filePath,
+        componentName,
+      });
       injectedComponentsHash[filePath] = componentName;
     }
   });
 
-  await Promise.all(nodesToChange.map(async (n) => {
-    const fileStat = await stat(n.filePath);
-    if (!fileStat.isFile) {
-      throw Error(
-        `Invalid CODEDEMO link specified; no such file "${n.filePath}"`,
-      );
-    }
+  await Promise.all(
+    nodesToChange.map(async (n) => {
+      if (!(await fileExists(n.filePath))) {
+        throw Error(
+          `Invalid CODEDEMO link specified; no such file "${n.filePath}"`,
+        );
+      }
 
-    const code = await readFile(n.filePath, 'utf8');
-    convertNodeToLocalDemo(n.node, n.parent, code, n.componentName);
-  }));
+      const code = await readFile(n.filePath, 'utf8');
+      convertNodeToLocalDemo(n.node, n.parent, code, n.componentName);
+    }),
+  );
 
   const injectedComponents = Object.keys(injectedComponentsHash).map(
     (filePath) => ({
       type: 'import',
-      value: `import ${injectedComponentsHash[filePath]} from '${filePath.replace(directory, './')}'`,
+      value: `import ${
+        injectedComponentsHash[filePath]
+      } from '${filePath.replace(`${directory}/`, './')}'`,
     }),
   );
 
