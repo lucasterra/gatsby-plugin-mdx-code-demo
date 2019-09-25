@@ -1,10 +1,10 @@
 {
   "name": "gatsby-plugin-mdx-code-demo",
   "description": "Gatsby plugin to generate code demos from JavaScript files",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.4",
   "author": "Lucas Terra <lucasterra7@gmail.com>",
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/lucasterra/gatsby-plugin-mdx-code-demo/issues"
   },
   "license": "MIT",
   "homepage": "https://github.com/lucasterra/gatsby-plugin-mdx-code-demo#readme",
