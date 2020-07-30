@@ -2,14 +2,13 @@
 
 exports[`gatsby-mdx-code-demo include code demo should work as expected 1`] = `
 "/* @jsx mdx */
-import DemoComponent from './demo-test.js'
-import Demo_0417875d4cdb3bf1fcf8354cb6bedeee from './static-appbar.js'
+import LocalComponent_c1d7dccf2297d0c91513979cdd8f6800 from '/path/to/some_directory/.cache/caches/gatsby-plugin-mdx-code-demo/imports/LocalComponent_c1d7dccf2297d0c91513979cdd8f6800.js'
 
 const makeShortcode = name => function MDXDefaultShortcode(props) {
   console.warn(\\"Component \\" + name + \\" was not imported, exported, or provided by MDXProvider as global scope\\")
   return <div {...props}/>
 };
-
+const CodeDemo = makeShortcode(\\"CodeDemo\\");
 const layoutProps = {
   
 };
@@ -20,9 +19,11 @@ export default function MDXContent({
 }) {
   return <MDXLayout {...layoutProps} {...props} components={components} mdxType=\\"MDXLayout\\">
 
-
     <h1>{\`Title\`}</h1>
-    <DemoComponent code={<div className=\\"gatsby-highlight\\"><pre className=\\"language-jsx\\"><code>{\\"\\\\n\\"}// prettier-ignore-start{\\"\\\\n\\"}import React from 'react'{\\"\\\\n\\"}// I wanna add some comments, just to make sure it will also escape them{\\"\\\\n\\"}{\\"\\\\n\\"}const StaticAppBar = () =&gt; {\\"{\\"}{\\"\\\\n\\"}{\\"  \\"}return ({\\"\\\\n\\"}{\\"    \\"}<span className=\\"token tag\\"><span className=\\"token tag\\"><span className=\\"token punctuation\\">&lt;</span>div</span><span className=\\"token punctuation\\">&gt;</span></span><span className=\\"token plain-text\\">This is my appbar, it is so cool, right?</span><span className=\\"token tag\\"><span className=\\"token tag\\"><span className=\\"token punctuation\\">&lt;/</span>div</span><span className=\\"token punctuation\\">&gt;</span></span>{\\"\\\\n\\"}{\\"  \\"});{\\"\\\\n\\"}{\\"}\\"}{\\"\\\\n\\"}{\\"\\\\n\\"}export default StaticAppBar{\\"\\\\n\\"}// prettier-ignore-end{\\"\\\\n\\"}</code></pre></div>} mdxType=\\"DemoComponent\\"><Demo_0417875d4cdb3bf1fcf8354cb6bedeee mdxType=\\"Demo_0417875d4cdb3bf1fcf8354cb6bedeee\\" /></DemoComponent>
+    <p><a parentName=\\"p\\" {...{
+        \\"href\\": \\"demo://static-appbar.js\\"
+      }}>{\`StaticAppBar\`}</a></p>
+    <CodeDemo code={\\"// prettier-ignore-start\\\\nimport React from 'react'\\\\n// I wanna add some comments, just to make sure it will also escape them\\\\n\\\\nconst StaticAppBar = () => {\\\\n  return (\\\\n    <div>This is my appbar, it is so cool, right?</div>\\\\n  );\\\\n}\\\\n\\\\nexport default StaticAppBar\\\\n// prettier-ignore-end\\"} lang=\\"jsx\\" mdxType=\\"CodeDemo\\"><LocalComponent_c1d7dccf2297d0c91513979cdd8f6800 mdxType=\\"LocalComponent_c1d7dccf2297d0c91513979cdd8f6800\\" /></CodeDemo>
     <p>{\`Lorem ipsum dolor sit amet.\`}</p>
     </MDXLayout>;
 }
