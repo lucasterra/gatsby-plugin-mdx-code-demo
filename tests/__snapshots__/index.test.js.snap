@@ -5,9 +5,9 @@ exports[`gatsby-mdx-code-demo include code demo should work as expected 1`] = `
 import LocalComponent_a210b9b535d9e8dc491d91e896c765dc_0 from '/path/to/some_directory/.cache/code-demo-imports/LocalComponent_a210b9b535d9e8dc491d91e896c765dc_0.js'
 
 const makeShortcode = name => function MDXDefaultShortcode(props) {
-  console.warn(\\"Component \\" + name + \\" was not imported, exported, or provided by MDXProvider as global scope\\")
-  return <div {...props}/>
-};
+      console.warn(\\"Component \\" + name + \\" was not imported, exported, or provided by MDXProvider as global scope\\")
+      return <div {...props}/>
+    };
 const CodeDemo = makeShortcode(\\"CodeDemo\\");
 const layoutProps = {
   

@@ -68,7 +68,7 @@ plugins: [
 ];
 ```
 
-2. Create a `CodeDemo` component
+2. Create a `CodeDemo` component. To highlight the `code block` you can use [`prism-react-renderer`](https://github.com/FormidableLabs/prism-react-renderer).
 
 ```jsx
 // src/components/CodeDemo.js
@@ -80,7 +80,7 @@ export function CodeDemo(props) {
 
   return (
     <div>
-      <pre>{code}</pre> {/* syntax highlighted code block*/}
+      <pre>{code}</pre> {/* code block as a string */}
       <div>
         {children} {/* the react rendered demo */}
       </div>
