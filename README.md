@@ -2,48 +2,29 @@
 
 Create inline code demos with MDX. This plugin is heavily inspired by [material-ui](https://material-ui.com)'s wonderful documentation. It allows you to write demos like [theirs](https://material-ui.com/demos/buttons/).
 
-## Example
+**Breaking changes in v2. The usage is radically simplified compared to v0 and v1, but they are totally uncompatible.**
 
-First you need to have a `demoComponent` setup (see further installation instructions below). i.e.:
-```javascript
-// DemoComponent.js
-import React from 'react';
+## Example usage
 
-// This is a container component to render our demos and their code
-function DemoComponent({ code, children }) {
-  return (
-    <div>
-      <pre>{code}</pre> {/* syntax highlighted code block*/}
-      <div>
-        {children} {/* the react rendered demo */}
-      </div>
-    </div>
-  );
-}
+To enable a `CodeDemo` just add the `codeDemo` metadata after the language in your MDX code block. The React component you want to demo needs to be default exported.
 
-export default DemoComponent
-```
+````markdown
+---
+title: Buttons Documentation
+---
 
-Create a Markdown file with a link markup to the JS file, using protocol `demo` for the url. The paths are relative to your Markdown file's path.
-```markdown
-## Default
+## Buttons
 
-[Buttons](demo://outlinedButtons.js)
+Here is an example Button in action:
 
-```
-
-Write a React component (default exported) to be rendered in place of the markup.
-```javascript
-// outlinedButtons.js
+```jsx codeDemo
 import React from 'react';
 import Button from '@material-ui/core/Button';
 
 function OutlinedButtons() {
   return (
     <>
-      <Button variant="outlined">
-        Default
-      </Button>
+      <Button variant="outlined">Default</Button>
       <Button variant="outlined" color="primary">
         Primary
       </Button>
@@ -63,30 +44,76 @@ function OutlinedButtons() {
 // Demos must be default exported
 export default OutlinedButtons;
 ```
+````
 
 ## Install
 
-`npm install --save gatsby-mdx gatsby-plugin-mdx-code-demo`
+```bash
+npm install --save gatsby-plugin-mdx gatsby-plugin-mdx-code-demo
+```
 
-## How to use
+## Setup
 
-```javascript
+1. Add `gastby-plugin-mdx-code-demo` to your `gastby-config.js` file
+
+```jsx
 // In your gatsby-config.js
 plugins: [
   {
-    resolve: 'gatsby-mdx',
+    resolve: 'gatsby-plugin-mdx',
     options: {
-      extensions: ['.mdx', '.md'],
-      gatsbyRemarkPlugins: [
-        {
-          resolve: `gatsby-plugin-mdx-code-demo`,
-          options: {
-            demoComponent: './src/components/DemoComponent', // a container component to render your demos 
-          },
-        },
-        { resolve: 'gatsby-remark-prismjs' }, // needed for generating syntax highlighted code
-      ]
-    }
-  }
-]
+      gatsbyRemarkPlugins: ['gatsby-plugin-mdx-code-demo'],
+    },
+  },
+];
 ```
+
+2. Create a `CodeDemo` component
+
+```jsx
+// src/components/CodeDemo.js
+import React from 'react';
+
+// This is a container component to render our demos and their code
+export function CodeDemo(props) {
+  const { code, children } = props;
+
+  return (
+    <div>
+      <pre>{code}</pre> {/* syntax highlighted code block*/}
+      <div>
+        {children} {/* the react rendered demo */}
+      </div>
+    </div>
+  );
+}
+```
+
+3. Make `CodeDemo` available through your `MDXProvider`
+
+```jsx
+// src/components/Layout.js
+import React from 'react';
+import { MDXProvider } from '@mdx-js/react';
+import { CodeDemo } from './CodeDemo';
+
+function Layout(props) {
+  const mdxComponents = {
+    h1: (props) => <h1 {...props} />,
+    // more components
+    CodeDemo: (props) => <CodeDemo {...props} />,
+  };
+
+  return <MDXProvider components={mdxComponents}>{props.children}</MDXProvider>;
+}
+
+export default Layout;
+```
+
+## FAQ?
+
+1. _How does it differ from [`react-live`](https://github.com/FormidableLabs/react-live)?_  
+   `react-live` will let you live edit your views, but it brings [`buble`](https://github.com/bublejs/buble) as a dependency. All of `gatsby-plugin-mdx-code-demo`'s magic happens at build time, so there is no dependency included. If you don't expect your users to edit your demos in real time `react-live` is probably overkill.
+
+2. _How does it differ from [`react-view`](https://github.com/uber/react-view)?_  
+   The same as above applies to `react-view`, except `react-view` brings in [`babel`](https://github.com/babel/babel) as a dependency. Also, [`react-view` doesn't currently work with Gatsby](https://github.com/uber/react-view/issues/31).

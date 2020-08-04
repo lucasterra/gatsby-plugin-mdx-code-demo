@@ -14,6 +14,7 @@ const mdxText = `
 # Title
 
 [StaticAppBar](demo://static-appbar.js)
+
 \`\`\`jsx codeDemo highlight test
 // prettier-ignore-start
 import React from 'react'
@@ -76,7 +77,14 @@ describe('gatsby-mdx-code-demo', () => {
     beforeAll(async () => {
       const demoPlugin = () => async (tree) => {
         await plugin(
-          { markdownAST: tree, markdownNode: { fileAbsolutePath: __dirname } },
+          {
+            markdownAST: tree,
+            markdownNode: {
+              fileAbsolutePath: __dirname,
+              id: 'deadbeef-beefdead',
+            },
+            cache: { directory: '\\path\\to\\some_directory\\.cache' },
+          },
           { demoComponent: './demo-test' },
         );
       };

@@ -2,7 +2,7 @@
 
 exports[`gatsby-mdx-code-demo include code demo should work as expected 1`] = `
 "/* @jsx mdx */
-import LocalComponent_c1d7dccf2297d0c91513979cdd8f6800 from '/path/to/some_directory/.cache/caches/gatsby-plugin-mdx-code-demo/imports/LocalComponent_c1d7dccf2297d0c91513979cdd8f6800.js'
+import LocalComponent_a210b9b535d9e8dc491d91e896c765dc_0 from '/path/to/some_directory/.cache/code-demo-imports/LocalComponent_a210b9b535d9e8dc491d91e896c765dc_0.js'
 
 const makeShortcode = name => function MDXDefaultShortcode(props) {
   console.warn(\\"Component \\" + name + \\" was not imported, exported, or provided by MDXProvider as global scope\\")
@@ -23,7 +23,7 @@ export default function MDXContent({
     <p><a parentName=\\"p\\" {...{
         \\"href\\": \\"demo://static-appbar.js\\"
       }}>{\`StaticAppBar\`}</a></p>
-    <CodeDemo code={\\"// prettier-ignore-start\\\\nimport React from 'react'\\\\n// I wanna add some comments, just to make sure it will also escape them\\\\n\\\\nconst StaticAppBar = () => {\\\\n  return (\\\\n    <div>This is my appbar, it is so cool, right?</div>\\\\n  );\\\\n}\\\\n\\\\nexport default StaticAppBar\\\\n// prettier-ignore-end\\"} lang=\\"jsx\\" mdxType=\\"CodeDemo\\"><LocalComponent_c1d7dccf2297d0c91513979cdd8f6800 mdxType=\\"LocalComponent_c1d7dccf2297d0c91513979cdd8f6800\\" /></CodeDemo>
+    <CodeDemo code={\\"// prettier-ignore-start\\\\nimport React from 'react'\\\\n// I wanna add some comments, just to make sure it will also escape them\\\\n\\\\nconst StaticAppBar = () => {\\\\n  return (\\\\n    <div>This is my appbar, it is so cool, right?</div>\\\\n  );\\\\n}\\\\n\\\\nexport default StaticAppBar\\\\n// prettier-ignore-end\\"} lang=\\"jsx\\" mdxType=\\"CodeDemo\\"><LocalComponent_a210b9b535d9e8dc491d91e896c765dc_0 mdxType=\\"LocalComponent_a210b9b535d9e8dc491d91e896c765dc_0\\" /></CodeDemo>
     <p>{\`Lorem ipsum dolor sit amet.\`}</p>
     </MDXLayout>;
 }
