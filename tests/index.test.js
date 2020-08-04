@@ -7,11 +7,28 @@ const path = require('path');
 const mdx = require('@mdx-js/mdx');
 const plugin = require('../index');
 
+const actualPath = jest.requireActual('path');
+
 // Mocks
 const mdxText = `
 # Title
 
 [StaticAppBar](demo://static-appbar.js)
+
+\`\`\`jsx codeDemo highlight test
+// prettier-ignore-start
+import React from 'react'
+// I wanna add some comments, just to make sure it will also escape them
+
+const StaticAppBar = () => {
+  return (
+    <div>This is my appbar, it is so cool, right?</div>
+  );
+}
+
+export default StaticAppBar
+// prettier-ignore-end
+\`\`\`
 
 Lorem ipsum dolor sit amet.
 `;
@@ -33,21 +50,26 @@ export default StaticAppBar
 
 describe('gatsby-mdx-code-demo', () => {
   beforeEach(() => {
-    fs.stat.mockReset();
-    fs.stat.mockImplementation((file, cb) => {
-      cb(null, { isFile: () => true, isMock: true });
-    });
+    fs.existsSync.mockReset();
+    fs.existsSync.mockImplementation(() => true);
 
     fs.readFile.mockReset();
-    fs.readFile.mockImplementation((file, openMode, cb) => {
-      cb(null, demoCode);
-    });
+    fs.readFile.mockImplementation(() => demoCode);
+
+    fs.writeFileSync.mockReset();
+    fs.writeFileSync.mockImplementation(() => null);
+
+    fs.mkdirSync.mockReset();
+    fs.mkdirSync.mockImplementation(() => null);
+
+    const cwdSpy = jest.spyOn(process, 'cwd');
+    cwdSpy.mockReturnValue('\\path\\to\\some_directory');
 
     path.dirname.mockReset();
     path.dirname.mockReturnValue('\\path\\to\\some_directory');
 
     path.join.mockReset();
-    path.join.mockReturnValue('\\path\\to\\some_directory\\static-appbar.js');
+    path.join.mockImplementation(actualPath.join);
   });
 
   describe('include code demo', () => {
@@ -55,7 +77,14 @@ describe('gatsby-mdx-code-demo', () => {
     beforeAll(async () => {
       const demoPlugin = () => async (tree) => {
         await plugin(
-          { markdownAST: tree, markdownNode: { fileAbsolutePath: __dirname } },
+          {
+            markdownAST: tree,
+            markdownNode: {
+              fileAbsolutePath: __dirname,
+              id: 'deadbeef-beefdead',
+            },
+            cache: { directory: '\\path\\to\\some_directory\\.cache' },
+          },
           { demoComponent: './demo-test' },
         );
       };

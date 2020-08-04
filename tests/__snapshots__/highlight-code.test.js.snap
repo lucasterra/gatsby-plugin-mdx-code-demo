@@ -1,6 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`highlight code should return a string formatted to jsx 1`] = `
-"<div className=\\"gatsby-highlight\\"><pre className=\\"language-jsx\\"><code>{\\"\\\\n\\"}// prettier-ignore-start{\\"\\\\n\\"}import React from 'react'{\\"\\\\n\\"}// I wanna add some comments, just to make sure it will also escape them{\\"\\\\n\\"}{\\"\\\\n\\"}const StaticAppBar = () =&gt; {\\"{\\"}{\\"\\\\n\\"}{\\"  \\"}return ({\\"\\\\n\\"}{\\"    \\"}<span className=\\"token tag\\"><span className=\\"token tag\\"><span className=\\"token punctuation\\">&lt;</span>div</span><span className=\\"token punctuation\\">&gt;</span></span><span className=\\"token plain-text\\">This is my appbar, it is so cool, right?</span><span className=\\"token tag\\"><span className=\\"token tag\\"><span className=\\"token punctuation\\">&lt;/</span>div</span><span className=\\"token punctuation\\">&gt;</span></span>{\\"\\\\n\\"}{\\"  \\"});{\\"\\\\n\\"}{\\"}\\"}{\\"\\\\n\\"}{\\"\\\\n\\"}export default StaticAppBar{\\"\\\\n\\"}// prettier-ignore-end{\\"\\\\n\\"}</code></pre></div>
-"
-`;
